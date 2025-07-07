@@ -17,3 +17,22 @@ Today I fleshed out the whole electronics setup and made the schematic. I also r
 I am now planning to use a 0.91 inch OLED display and EC11 rotary encoder for the temperature selection. I'll use the screen to display the temp, dial to adjust it and press the dial to put the gun to sleep, like keep the temp lower but not fully shut off.
 
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-6Schematic.PNG"/>
+
+## July 6th/7th: Rethought schematic some, lots of CAD work, PCB design completed, got a semi-final BOM (12 hours)--Through midnight
+This was a mega session, I have basically everything done except for the CAD, I still have to figure out how to do the battery though. This was some quite challenging CAD work, as it's a lot of weird parts and packaging is very challenging. This thing is going to be way bigger than I'd like, partially because the motor I chose is massive, but it's too late now to change it. I removed the mosfet control for the motor, that's now just done off of the drill trigger. It turns out, drill triggers are actually all in one speed controllers. For the extruder design, I've adapted the LDO Orbiter to work with the DC motor. I essentially cut out the gearing entirely so the motor just attaches straight to the drive gear. Unfortunately there wasen't really any good place to put the pcb, so there's just gonna be a huge box taking up most of the front, it's not elegant at all, but nothing about this thing is, so whatever. I'm really not looking forward to finishing the case and making the handle. Fitting that trigger in is going to be very difficult, as it's a weird geometry and I'm horrible at organic modelling. I can't decide if I want to just buy a battery adapter or make my own, the problem with buying one is I can't find any dimensions to mount it, so I think I'm just gonna have to figure out my own adapter. I'm regretting my choice of screw terminals for a lot of the connections, as they take up a ton of space. I'd like to keep them, but I might end up redesigning the pcb if I get tired of having that huge box.
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-7Schematic.PNG"/>
+
+New schematic
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-7PCB.PNG"/>
+
+PCB
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-7CAD.PNG"/>
+
+CAD
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-7Cart.PNG"/>
+
+Current BOM
