@@ -36,3 +36,18 @@ CAD
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-7Cart.PNG"/>
 
 Current BOM
+
+## July 8/9th: Went through midnight again. Corrected schematic some, redid some of pcb routing, lots of CAD work (7 hours)
+Adjusted the schematic because I realized I setup the diode wrong. I also redid some of the pcb design and added thicker traces for the power supply. Most of the time was spend on CAD, I created a battery mounting system, modelled the handle and mounting for the handle, added pcb mounting, and added a cooling fan mount for the extruder heatsink. The handle was quite a pain, but I think it turned out alright. I kept running into headaches because of my poor CAD habits, like not putting sketches under their proper component. This led to a lot of redoing stuff because I had to adjust things. I really need to work on keeping an organized timeline too, I kinda like to work without it but I should definately put more effort to learning Fusion stuff more. Anyways, I'm basically done with hardware now. The only thing left(hopefully) is adding a cosmetic shell, and coding.
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-9Schematic.PNG"/>
+
+Schematic
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-9PCB.PNG"/>
+
+PCB
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-9CAD.PNG"/>
+
+CAD
