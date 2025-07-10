@@ -51,3 +51,10 @@ PCB
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-9CAD.PNG"/>
 
 CAD
+
+## July 9th: Corrected one thing on schematic/pcb and wrote code (2.5 hours)
+Today was mostly just coding, I wrote code for the pid control of the heater and got the rotary encoder stuff. I still need to do the screen and wrap it all together. I tried simulating some stuff in tinkercad to test the code but I couldn't figure out anything good for pid control testing so I gave up on that. I also just had to change the input pin for the thermistor and added some stuff to the schematic to represent the battery and buck converter. I'll add images of that in a future session when it's done.
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-9Code1.PNG"/>
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-9Code2.PNG"/>
+Code
