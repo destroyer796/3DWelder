@@ -1,6 +1,19 @@
 # 3DWelder
-An overbuilt 3D pen that will use a chc pro hotend and custom dc extruder powered by a power tool battery
+This is an overbuilt 3D pen that uses a CHC Pro hotend and a custom Orbiter extruder adapted to use a DC motor. The whole thing is powered by a drill battery to allow it to be more portable. 
 
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderRender.png">
+
+## PCB
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderSchematic.PNG">
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderPCB.PNG">
+
+## Wiring
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-183DGunDiagram.png">
+
+## BOM
 
 | Item | Quantity | Price | Source | Notes | Owned/Buying |
 |--------|--------|--------|--------|--------|--------|
