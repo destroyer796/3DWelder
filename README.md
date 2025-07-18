@@ -1,17 +1,226 @@
 # 3DWelder
-This is an overbuilt 3D pen that uses a CHC Pro hotend and a custom Orbiter extruder adapted to use a DC motor. The whole thing is powered by a drill battery to allow it to be more portable. 
-
+This is an overbuilt 3D pen designed to be used for "welding" 3D printed parts together using 1.75mm filament. This project is funded by [Hack Club](https://hackclub.com/) as a part of the [Highway](https://highway.hackclub.com/) program.
 
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderRender.png">
 
-## PCB
+This design uses a CHC Pro hotend and a custom Orbiter extruder adapted to use a DC motor. This DC motor's speed is controlled by a drill trigger adapted into the handle. It has a small screen and a rotary encoder for adjusting and showing the temperature target. The whole thing is powered by a drill battery to make it more portable and easier to use. This project is currently completely untested.
 
+## PCB
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderSchematic.PNG">
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderPCB.PNG">
 
-## Wiring
+The pcb was designed using KiCad, and it is only 2 layers. The pcb controlls everything except for voltage control and the motor, which is controlled by the drill trigger. It uses screw terminals and jst-xh connections. The brains of the whole thing is an Arduino Nano.
 
+## Wiring/Assembly
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-183DGunDiagram.png">
+
+All 3D printed parts screw together using M3 heatset inserts and various M3/M4 screws. For wiring, 2 spade connectors are used as terminals on the battery. From there, there's 2 ways of wiring everything else. You can either put the buck converter inside the space above the battery, then have wires coming off of that to the drill trigger and pcb, or have the buck converter up by the pcb, then have wires going back down to the drill trigger. Having the Buck converter in the handle is much cleaner, but may be very difficult to fit inside that small space.
+
+## Code
+<details>
+  <summary>
+    Arduino Code
+  </summary>
+  
+  ~~~
+  #include <PID_v1.h>
+  #include <Adafruit_SSD1306.h>
+  #include <Adafruit_GFX.h>
+  #include <Wire.h>
+  
+  //Defines screen width/height
+  #define SCREEN_WIDTH 128
+  #define SCREEN_HEIGHT 32
+  
+  //Not using a reset pin
+  #define OLED_RESET -1
+  
+  //Creates a display named display, gives it parameters
+  Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+  
+  // EC11 code
+  const int EC11PinA = 8;
+  const int EC11PinB = 7;
+  volatile in encoderPos = 0;
+  in lastEncoded = 0;
+  
+  /* -----------  USER SETTINGS  ----------- */
+  const int   thermistorPin   = A0;
+  const int   heaterPin       = 6;     // PWM pin
+  const int   statusLedPin    = 13;    // Built‑in LED on most Arduinos
+  const float R_FIXED         = 100000.0;   // 100 kΩ divider resistor
+  
+  // Steinhart–Hart coefficients for Semitec 104GT‑2 / 104NT
+  const float A = 1.009249522e-3;
+  const float B = 2.378405444e-4;
+  const float C = 2.019202697e-7;
+  
+  // PID tuning
+  double Kp = 4.0, Ki = 0.3, Kd = 12.0;
+  
+  /* Temperature targets */
+  double setpointC   = 60.0;   // Desired temperature
+  const double MAX_TEMP_C      = 300.0;   // Hard safety limit
+  const double MIN_VALID_VOLT  = 0.10;   // Thermistor‑open detection
+  
+  /* -----------  GLOBALS  ----------- */
+  double inputC, outputPWM;          // For PID library
+  PID myPID(&inputC, &outputPWM, &setpointC, Kp, Ki, Kd, DIRECT);
+  
+  enum FaultState { OK, OVER_TEMPERATURE, SENSOR_ERROR };
+  FaultState fault = OK;
+  
+  /* Timing helpers */
+  unsigned long lastBlink   = 0;
+  bool          ledState    = false;
+  
+  void setup() {
+    //Start I2C
+    Wire.begin();
+  
+    // Initializes display using I2C address 0x3C, if it fails it prints error message
+    // Switchcapvcc thing tells it that display has internal voltage regulator
+    if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+      Serial.begin(9600);
+      Serial.println(F("SSD1306 allocation failed"));
+      for (;;);
+    }
+  
+    //Display test commands
+    display.clearDisplay(); // Clears display
+    display.setTextSize(1); // Sets text size, 1 = 6/8 pixels, 5/7 without spacing, 2 = 2x, 3 = 3x
+    display.setTextColor(SSD1306_WHITE); // Set white text
+    display.setCursor(0,0); // Sets cursor to top-left
+    display.println(F("Hello SH-S091!")); // Print message to display buffer
+    display.display(); // Push everything in buffer to scren
+    // display.setFont(), allows you to change fonts, need to install them
+    // display.fillRect(x, y, width, height, SSD1306_BLACK) draws a black rect, way to clear part of screen
+  
+    //EC11 Code
+    pinMode(EC11PinA, INPUT_PULLUP);
+    pinMode(EC11PinB, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(EC11PinA), updateEncoder, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(EC11PinB), updateEncoder, CHANGE);
+  
+  
+    pinMode(heaterPin,   OUTPUT);
+    pinMode(statusLedPin, OUTPUT);
+    Serial.begin(9600);
+  
+    myPID.SetOutputLimits(0, 255);
+    myPID.SetSampleTime(250);          // 4 Hz PID updates
+    myPID.SetMode(AUTOMATIC);
+  }
+  
+  void loop() {
+    //EC11 Code
+    static int lastPos = 0;
+    if (encoderPos != lastPos) {
+      Serial.print("Value: ");
+      Serial.println(encoderPos);
+  
+      display.fillRect(0, 0, 64, 32, SSD1306_BLACK);
+      display.setTextSize(1);
+      display.setTextColor(SSD1306_WHITE);
+      display.setCursor(0,0);
+      display.println(F(encoderPos));
+      display.display
+  
+      lastPos = encoderPos;
+    }
+  
+  
+    /* ---------- Read thermistor ---------- */
+    int   adc = analogRead(thermistorPin);
+    float v   = adc * 5.0 / 1023.0;
+  
+    /* Sensor fault check */
+    if (v < MIN_VALID_VOLT)  fault = SENSOR_ERROR;
+  
+    /* Convert to °C if no sensor fault */
+    if (fault == OK) {
+      double R = R_FIXED * (5.0 / v - 1.0);
+      double lnR = log(R);
+      double tempK = 1.0 / (A + B*lnR + C*lnR*lnR*lnR);
+      inputC = tempK - 273.15;
+  
+      /* Over‑temperature check */
+      if (inputC >= MAX_TEMP_C) fault = OVER_TEMPERATURE;
+    }
+  
+    /* ---------- Safety Handling ---------- */
+    if (fault != OK) {
+      myPID.SetMode(MANUAL);       // Freeze PID
+      outputPWM = 0;               // Heater OFF
+      analogWrite(heaterPin, 0);
+    } else {
+      myPID.Compute();             // Let PID calculate outputPWM
+      analogWrite(heaterPin, (int)outputPWM);
+    }
+  
+    /* ---------- Status LED ----------
+       • ON  …… actively heating (PWM > 0)
+       • Slow blink …… at set‑point (PID output ~0)
+       • Fast blink …… fault
+    ---------------------------------- */
+    unsigned long now = millis();
+    unsigned long blinkPeriod =
+        (fault != OK)          ? 150 :        // fast blink on fault
+        (outputPWM < 2)        ? 800 :        // slow blink at set‑point
+                                 0;           // solid ON while heating
+  
+    if (blinkPeriod == 0) {
+      digitalWrite(statusLedPin, HIGH);
+    } else if (now - lastBlink >= blinkPeriod) {
+      ledState = !ledState;
+      digitalWrite(statusLedPin, ledState);
+      lastBlink = now;
+    }
+  
+    /* ---------- Serial Monitor ---------- */
+    Serial.print("Temp: ");
+    Serial.print((fault == OK) ? inputC : NAN);
+    Serial.print(" °C | PWM: ");
+    Serial.print(outputPWM);
+    Serial.print(" | Fault: ");
+    Serial.println(
+        (fault == OK) ? "None" :
+        (fault == OVER_TEMPERATURE) ? "Over-Temp" : "Sensor Error");
+  
+  
+    // Shows temp on display
+    display.fillRect(64, 0, 64, 32, SSD1306_BLACK);
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_WHITE);
+    display.setCursor(64,0);
+    display.println(F(inputC));
+    display.display
+  }
+  
+  //EC11 code, runs everytime a change in position is detected
+  void updateEncoder() {
+    int MSB = digitalREad(EC11PinA);
+    int LSB = digitalRead(EC11PinB);
+  
+    int encoded = (MSB << 1) | LSB;
+    int sum = (lastEncocded << 2) | encoded;
+  
+    //Clockwise
+    if (sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011) {
+      encoderPos += 5;
+    }
+    //Counter-Clockwise
+    if (sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000) {
+      encoderPos -= 5;
+    }
+  
+    lastEncoded = encoded
+  }
+  ~~~
+
+</details>
+
+This is the firmware to be uploaded to the Arduino Nano. It's purpose is for PID control of the heater via the thermistor readings and mosfet. It has temperature control via the EC11 rotary encoder, and the temperature target and current temperature are displayed on the 0.91 inch OLED screen.
 
 ## BOM
 
@@ -48,4 +257,5 @@ This is an overbuilt 3D pen that uses a CHC Pro hotend and a custom Orbiter extr
 | Spade Terminals | 2 | $2.38 | [Aliexpress](https://www.aliexpress.com/item/3256802579044914.html?spm=a2g0o.cart.0.0.755738daqLWaOW&mp=1&pdp_npi=5%40dis%21USD%21USD%202.48%21USD%202.38%21%21USD%202.38%21%21%21%402103146c17528268578343657ef8ea%2112000022078614610%21ct%21US%212965353747%21%211%210&_gl=1*14pyl8l*_gcl_aw*R0NMLjE3NTE4NDcxMzYuQ2owS0NRand2YWpEQmhDTkFSSXNBRUUyOVdvb1JYN0FnSzczYmNCVXN5VHRNRGlUUjV4QXJ0RzRDSVl6Tmx5ZEZ2alByYWdRQjczVklkSWFBc3FnRUFMd193Y0I.*_gcl_dc*R0NMLjE3NTE4NDcxMzYuQ2owS0NRand2YWpEQmhDTkFSSXNBRUUyOVdvb1JYN0FnSzczYmNCVXN5VHRNRGlUUjV4QXJ0RzRDSVl6Tmx5ZEZ2alByYWdRQjczVklkSWFBc3FnRUFMd193Y0I.*_gcl_au*MTM0OTQyNjgzMy4xNzUwMTkyNzY4*_ga*MjcyMzA3OTUzLjE3NTI4MjM0NjE.*_ga_VED1YSGNC7*czE3NTI4MjM0NjEkbzEkZzEkdDE3NTI4MjY4NTgkajU3JGwwJGgw) | For battery connection | Owned |
 
 Total: $142.72
+
 My Total: $118.35
