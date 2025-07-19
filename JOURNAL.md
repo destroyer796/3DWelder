@@ -5,6 +5,8 @@ description: "An overbuilt 3D pen using a CHC Pro and custom dc motor extruder p
 created_at: "2025-7-3"
 ---
 
+This is my journal of all my work and time spend on this project. Total time: 36 hours.
+
 ## July 3rd: Pretty much just planning and some research for parts I could use (2.5 hours)
 I did a lot of research into using a stepper motor powered extruder like a 3d printer but I realized that it would probably be simpler and cheaper to use a dc motor instead for this use case, I'm planning on using a 12v dc motor now. 
 I'm thinking I'll use a 12v Dewalt battery or something and power this motor and an arduino nano off of it, I might add a boost converter to get 24v for the hotend or just run with 12v if I can get enough power. I need to do more research on that.
