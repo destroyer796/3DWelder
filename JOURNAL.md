@@ -281,3 +281,15 @@ CAD
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-18BOM.PNG">
 
 BOM
+
+## July 18th: Got all the documentation set up, added a knob, and made a small correction to the PCB. (3 hours)
+Today was mostly spend getting all the documentation ready for submission. During this process I noticed a couple things to correct. I added a knob to the rotary encoder, and fixed an issue with the DRC on the PCB. For documentation, I wrote basically the whole README, got final images/renders uploaded, made a wiring diagram, uploaded CAD files and code, and licenced the Github with MIT license.
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/7-183DGunDiagram.png">
+
+Wiring Diagram
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderRender.png">
+
+Render
+
