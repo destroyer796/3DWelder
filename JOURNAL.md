@@ -295,3 +295,11 @@ Wiring Diagram
 
 Render
 
+## July 28th: Added pullup resistors to I2C(oops) (0.5 hour)
+I realized that I forgot to add pullup resistors to the I2C on the pcb, so just went in and added that. I also updated the pictures.files in here and redid the gerber.
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderSchematicNew.PNG">
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderPCBNew.PNG">
+
+New PCB
+
