@@ -9,8 +9,8 @@ This design uses a CHC Pro hotend and a custom Orbiter extruder adapted to use a
 So, why did I choose to make this ridiculous thing anyways? Well, the best way to join 3D printed parts together if they can't be screwed is by literally joining them together with the same plastic they're made of. This can be very difficult with a normal 3D pen though, as they're quite low powered and actually can't even melt many higher temperature plastics. I wanted a solution to this, so I decided to basically make a regular 3D printer extruding setup, but make it portable. It has some other uses aswell, if you use EVA filament, it could function essentially as a hot glue gun. It could also theoretically be used as a 3D pen, but not that well.
 
 ## PCB
-<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderSchematic.PNG">
-<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderPCB.PNG">
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderSchematicNew.PNG">
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderPCBNew.PNG">
 
 The pcb was designed using KiCad, and it is only 2 layers. The pcb controlls everything except for voltage control and the motor, which is controlled by the drill trigger. It uses screw terminals and jst-xh connections. The brains of the whole thing is an Arduino Nano.
 
