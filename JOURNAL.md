@@ -5,7 +5,7 @@ description: "An overbuilt 3D pen using a CHC Pro and custom dc motor extruder p
 created_at: "2025-7-3"
 ---
 
-This is my journal of all my work and time spend on this project. Total time: 36 hours.
+This is my journal of all my work and time spend on this project. Total time: 39 hours.
 
 ## July 3rd: Pretty much just planning and some research for parts I could use (2.5 hours)
 I did a lot of research into using a stepper motor powered extruder like a 3d printer but I realized that it would probably be simpler and cheaper to use a dc motor instead for this use case, I'm planning on using a 12v dc motor now. 
@@ -295,8 +295,8 @@ Wiring Diagram
 
 Render
 
-## July 28th: Added pullup resistors to I2C(oops) (0.5 hour)
-I realized that I forgot to add pullup resistors to the I2C on the pcb, so just went in and added that. I also updated the pictures.files in here and redid the gerber.
+## July 28th: Added pullup resistors to I2C(oops), found Amazon links for faster shipping and updated BOM file with these new links, ordered everything. (3 hours)
+I realized I forgot to add pullup resistors to the I2C pins, so I went in and did that. I also updated the pictures and files with these corrections. I also had to find Amazon links for a lot of the parts to get faster shipping, and updated the BOM file accordingly. I finally ordered everything and did all the stuff associated with that.
 
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderSchematicNew.PNG">
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderPCBNew.PNG">
