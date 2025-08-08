@@ -306,5 +306,23 @@ New PCB
 ## August 4-6th: Printed a bunch of parts and soldered the PCB! (6 hours)
 The last few days I printed out most of the parts I need for assembly, and did some of the heatset inserts. I soldered the PCB, but it turns out I accidentally put the wrong size resistors for some of the footprints, so I had to do some sketchy hand soldering. I also wired up the buck converter, and set it up for the battery. Everything was kinda done randomly so I decided to combine it into one session.
 
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/8-7SolderingFront.PNG">
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/8-7SolderingBack.PNG">
+
+My beautiful soldering
+
 ## August 7th: First mock up assembly and fixing some mistakes... ( 6 hours)
 Oh boy, I made a few more mistakes on this thing than I should have... So today I went into the pcb design to fix up the wrong size resistors I mentioned yesterday... and well I noticed that I wired my screen to the wrong pins on the Nano. Unfortunately I can't really quick fix this, so I guess this thing is going to be fixed temp for the time being. During the mock up I realized that the motor assembly I ordered off Amazon to ship faster had the motor part offset on the other side of the original one, so it interferes a little bit. I also corrected the size of a heatset insert hole and added a little extra room in the battery area to fit the buck converter. Other than that though, everything is going well. I was able to confirm the trigger/motor work with the battery, so that's good. Printing out new parts right now. I'm so mad about that PCB, but I'm just gonna order a new one I think. It won't get here in time for August 14th demo but I'm just gonna try to demo without it.
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/8-7PCB.PNG">
+
+Corrected PCB
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/8-7Welder.PNG">
+
+Mock Up
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/8-7CAD.PNG">
+
+Updated CAD
+
