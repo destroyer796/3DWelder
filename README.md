@@ -10,7 +10,7 @@ So, why did I choose to make this ridiculous thing anyways? Well, the best way t
 
 ## PCB
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderSchematicNew.PNG">
-<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderPCBNew.PNG">
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/8-7PCB.PNG">
 
 The pcb was designed using KiCad, and it is only 2 layers. The pcb controlls everything except for voltage control and the motor, which is controlled by the drill trigger. It uses screw terminals and jst-xh connections. The brains of the whole thing is an Arduino Nano.
 
