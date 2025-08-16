@@ -1,6 +1,8 @@
 # 3DWelder
 This is an overbuilt 3D pen designed to be used for "welding" 3D printed parts together using 1.75mm filament. This project is funded by [Hack Club](https://hackclub.com/) as a part of the [Highway](https://highway.hackclub.com/) program.
 
+Keep in mind for time being PCB is not working, I'll update soon.
+
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderPic2.jpg">
 
 This design uses a CHC Pro hotend and a custom Orbiter extruder adapted to use a DC motor. This DC motor's speed is controlled by a drill trigger adapted into the handle. It has a small screen and a rotary encoder for adjusting and showing the temperature target. The whole thing is powered by a drill battery to make it more portable and easier to use. This project is currently completely untested.
