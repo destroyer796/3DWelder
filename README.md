@@ -1,12 +1,14 @@
 # 3DWelder
 This is an overbuilt 3D pen designed to be used for "welding" 3D printed parts together using 1.75mm filament. This project is funded by [Hack Club](https://hackclub.com/) as a part of the [Highway](https://highway.hackclub.com/) program.
 
-<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderRender.png">
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderPic2.jpg">
 
 This design uses a CHC Pro hotend and a custom Orbiter extruder adapted to use a DC motor. This DC motor's speed is controlled by a drill trigger adapted into the handle. It has a small screen and a rotary encoder for adjusting and showing the temperature target. The whole thing is powered by a drill battery to make it more portable and easier to use. This project is currently completely untested.
 
 ## Why?
 So, why did I choose to make this ridiculous thing anyways? Well, the best way to join 3D printed parts together if they can't be screwed is by literally joining them together with the same plastic they're made of. This can be very difficult with a normal 3D pen though, as they're quite low powered and actually can't even melt many higher temperature plastics. I wanted a solution to this, so I decided to basically make a regular 3D printer extruding setup, but make it portable. It has some other uses aswell, if you use EVA filament, it could function essentially as a hot glue gun. It could also theoretically be used as a 3D pen, but not that well.
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderRender.png">
 
 ## PCB
 <img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderSchematicNew.PNG">
