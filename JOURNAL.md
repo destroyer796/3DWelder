@@ -5,7 +5,7 @@ description: "An overbuilt 3D pen using a CHC Pro and custom dc motor extruder p
 created_at: "2025-7-3"
 ---
 
-This is my journal of all my work and time spend on this project. Total time: 39 hours.
+This is my journal of all my work and time spend on this project. Total time: 68.5 hours.
 
 ## July 3rd: Pretty much just planning and some research for parts I could use (2.5 hours)
 I did a lot of research into using a stepper motor powered extruder like a 3d printer but I realized that it would probably be simpler and cheaper to use a dc motor instead for this use case, I'm planning on using a 12v dc motor now. 
@@ -326,3 +326,13 @@ Mock Up
 
 Updated CAD
 
+## August 9/10th: Trying to get this thing to work. (8 hours):
+Well, I don't know if this project is going to work. Today I failed at getting the screen to work, got the rotary encoder working, failed to get the thermistor working, fried my Arduino, and got the new parts printed. Alright so heres the rought timeline of events. First I got those parts printed, installed heatset inserts, went great. Then I got the rotary encoder working, took a little while to get a reliable setup, but good. Then I tried to jerry-rig the screen to work, but it just wasn't working, oh well. Then I tried to get the thermistor to work... It just wasn't working, like it would always read -60C. Troubleshooting this and the screen went on for a while, but eventually the Arduino just died on me, I don't really know what happened, but yeah. I'm pretty defeated at this point. I'm just gonna have to restart from scratch, and hope I can figure it out. I'm gonna order a new screen, encoder, and some resistors to help me with trying to rebuild this thing.
+
+## August 13/14th: Rebuilding! (8 hours):
+Finally!!! It's working. This was quite a marathon. I started off with soldering up a new PCB, doing the jerry-rigged fixes as I went to make everything a bit cleaner. Then came the troubleshooting, There was a lot of troubleshooting. I just couldn't get the Arduino to connect to my PC, so I looked in the Aliexpress reviews, and sure enough, it was the wrong chipset. They sold an ATMEGA328PB under the regular P name. This basically meant there was not built in support for flashing it, and I had to figure that out. I tried a bunch of different methods, but eventually found one that worked. Use a custom Arduino board library for it, and when flashing, hold down the reset button, plug it in, flash it, then while flashing release the boot button. And the serial had to be closed. After I got that working, it was relatively smooth sailing. I did some troubleshooting the thermistor first, and realized I had the wrong value resistor. After I fixed that, I assembled everything to get the heater up and running. Then I worked on tuning the PID to a decent point, which took a while and some fixes. Then, I troubleshot the screen a while, and eventually realized I was shorting SDA to ground, due to my misrouted pcb traces. I fixed that, and after getting the rotary encoder working and everything put together in the code, it's finally done. It actually works, and I'm going to bed. This was a long night.
+
+## August 14th: Demo! (1.5 hours):
+This took longer than I thought, but today I demoed. Basically just polished the code a little more, filmed a little video of it working, and got it on Printables. I still want to finish fixing the PCB design and order that to really wrap up the project, but it's done. Thanks so much to everybody at Hack Club and Highway, this was quite the journey.
+
+<img src="https://github.com/destroyer796/3DWelder/blob/main/Images/3DWelderPic2.jpg">
