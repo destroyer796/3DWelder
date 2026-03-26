@@ -4,8 +4,6 @@
 #include <Adafruit_SSD1306.h>
 #include <math.h>
 
-
-
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 32
 #define OLED_ADDR 0x3C
@@ -15,18 +13,13 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire);
 
-
-//Define Variables we'll be connecting to
-double Setpoint = 200; // initial target temperature
+double Setpoint = 200; // Initial target temp
 double Input, Output;
 
-//Specify the links and initial tuning parameters
-double Kp=3.0, Ki=0.05, Kd=0;
+double Kp=3.0, Ki=0.05, Kd=0; // tuning parameters
 PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 int WindowSize = 300;
-
 unsigned long windowStartTime;
-
 
 const int EC11PinA = 5;
 const int EC11PinB = 4;
@@ -34,10 +27,9 @@ const int EC11PinB = 4;
 volatile int encoderPos = 0;
 int displayPos = 0;
 
-// Track previous stable state
-volatile uint8_t prevState = 0;
+volatile uint8_t prevState = 0; // previous stable state of encoder
 
-// Lookup table for quadrature encoder
+// Lookup table for encoder
 const int8_t table[16] = {
   0, -1, 1, 0,
   1, 0, 0, -1,
@@ -45,11 +37,11 @@ const int8_t table[16] = {
   0, 1, -1, 0
 };
 
-
-const float SERIES_RESISTOR = 4700.0;    // bottom resistor = 470 Ω
-const float R0 = 100000.0;              // thermistor nominal 100k @ 25°C
-const float T0_K = 25.0 + 273.15;       // 25°C in Kelvin
-const float B_COEFFICIENT = 4267.0;     // Beta value (good starting point for 104GT-2)
+// Thermistor settings
+const float SERIES_RESISTOR = 4700.0; // Bottom resistor resistance
+const float R0 = 100000.0; // Thermistor resistance at T0
+const float T0_K = 25.0 + 273.15; // Room temp
+const float B_COEFFICIENT = 4267.0; // Beta value (good starting point for 104GT-2)
 
 int readADCavg(int pin, int samples = 64) {
   long sum = 0;
@@ -60,20 +52,18 @@ int readADCavg(int pin, int samples = 64) {
   return (int)(sum / samples);
 }
 
-  // Steinhart–Hart coefficients for Semitec 104GT‑2 / 104NT
+// Steinhart–Hart coefficients for Semitec 104GT‑2
 const float A = 1.009249522e-3;
 const float B = 2.378405444e-4;
 const float C = 2.019202697e-7;
 
-
 float getTemperatureC() {
-  int adcValue = readADCavg(THERMISTOR_PIN, 128); // 128 samples gives good smoothing
+  int adcValue = readADCavg(THERMISTOR_PIN, 128); // 128 samples to smooth
   float adc = (float)adcValue;
 
   if (adc <= 2)  { Serial.println("ADC too low — check wiring!");  return NAN; }
   if (adc >= 1021){ Serial.println("ADC too high — check wiring!"); return NAN; }
 
-  // For wiring: 5V -> thermistor -> A0 -> SERIES_RESISTOR -> GND
   float Rtherm = SERIES_RESISTOR * (1023.0 / adc - 1.0);
 
   // Beta formula: T = 1 / ( (1/B) * ln(R/R0) + 1/T0 )
@@ -82,7 +72,7 @@ float getTemperatureC() {
   float Tk = 1.0 / invT;
   float Tc = Tk - 273.15;
 
-  // Debug output (compact)
+  // Debug output
   Serial.print("ADC=");
   Serial.print(adcValue);
   Serial.print(" R=");
@@ -99,27 +89,26 @@ void setup() {
   Serial.begin(250000);
   pinMode(EC11PinA, INPUT_PULLUP);
   pinMode(EC11PinB, INPUT_PULLUP);
-  // Initialize prevState
-  prevState = (digitalRead(EC11PinA) << 1) | digitalRead(EC11PinB);
+  pinMode(RELAY_PIN, OUTPUT);
+
+  prevState = (digitalRead(EC11PinA) << 1) | digitalRead(EC11PinB); // Initialize prevState
 
   // Enable pin change interrupts for pins 4 and 5
-  PCICR |= (1 << PCIE2);        // Enable PCINT[23:16]
-  PCMSK2 |= (1 << PCINT20);     // Pin 4
-  PCMSK2 |= (1 << PCINT21);     // Pin 5
-  pinMode(RELAY_PIN, OUTPUT);
-  analogReference(DEFAULT); // Using 5V as ADC reference (adjust if using external)
+  PCICR |= (1 << PCIE2); // PCIE2: enables pin change interrups for port D (0-7) within PCICR: pin change interrupt control register
+  PCMSK2 |= (1 << PCINT20); // Basically enables PCINT20: Pin 4 inside of PCMSK2: pin change mask register for port D
+  PCMSK2 |= (1 << PCINT21); // PCINT21: Pin 5
 
-  windowStartTime = millis();
+  analogReference(DEFAULT); // Using 5V as ADC reference
 
   windowStartTime = millis();
   Setpoint = encoderPos;
   Input = 0; Output = 0;
 
   myPID.SetOutputLimits(0, WindowSize);
-  myPID.SetSampleTime(1000); // 1 s sample time
+  myPID.SetSampleTime(1000); // 1 sec sample time
   myPID.SetMode(AUTOMATIC);
 
-  Serial.println("Controller ready (fixed 5V top, 4.7kΩ bottom)");
+  Serial.println("Controller ready");
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR)) {
     Serial.println(F("SSD1306 allocation failed"));
@@ -133,8 +122,9 @@ void setup() {
   display.display();
 }
 
+
 void loop() {
-  noInterrupts();
+  noInterrupts(); // prevents value from getting corrupted by state change
   int pos = encoderPos;
   interrupts();
 
@@ -147,15 +137,12 @@ void loop() {
 
   float temp = getTemperatureC();
 
-  if (isnan(temp)) return; // skip PID if bad reading
+  if (isnan(temp)) return; // Skip PID if bad reading
   Input = temp;
 
   myPID.Compute();
-
-  /************************************************
-   * turn the output pin on/off based on pid output
-   ************************************************/
-  if (millis() - windowStartTime > WindowSize) { //time to shift the Relay Window
+  // Turn the output pin on/off based on pid output
+  if (millis() - windowStartTime > WindowSize) { // Time to shift the Relay Window
     windowStartTime += WindowSize;
   }
   if (Output > millis() - windowStartTime) {
@@ -180,7 +167,7 @@ void loop() {
 }
 
 
-ISR(PCINT2_vect) {
+ISR(PCINT2_vect) { // Triggers when encoder state changes
   uint8_t MSB = digitalRead(EC11PinA);
   uint8_t LSB = digitalRead(EC11PinB);
   uint8_t state = (MSB << 1) | LSB;
@@ -189,10 +176,9 @@ ISR(PCINT2_vect) {
   uint8_t index = (prevState << 2) | state;
   int8_t movement = table[index];
 
-  // Only count full detents (+/- 4 quadrature steps)
+  // Only count full detents (4 steps)
   static int stepCount = 0;
   stepCount += movement;
-
   if (stepCount >= 4) {
     encoderPos += 5; // CW
     stepCount = 0;
@@ -200,7 +186,6 @@ ISR(PCINT2_vect) {
     encoderPos -= 5; // CCW
     stepCount = 0;
   }
-
   prevState = state;
 }
 
@@ -215,9 +200,3 @@ void updateDisplay() {
   display.println(int(Setpoint));
   display.display();
 }
-
-
-
-
-
-
