@@ -27,7 +27,7 @@ const int EC11PinB = 4;
 volatile int encoderPos = 0;
 int displayPos = 0;
 
-volatile uint8_t prevState = 0; // previous stable state of encoder
+volatile uint8_t prevState = 0; // Previous stable state of encoder
 
 // Lookup table for encoder
 const int8_t table[16] = {
